@@ -8,5 +8,4 @@ Route::get('/', function () {
 
 Route::view('/{any}', 'layouts.app')->where('any', '.*');
 
-// Auth::routes();
 

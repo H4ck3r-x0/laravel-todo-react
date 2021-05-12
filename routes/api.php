@@ -26,3 +26,30 @@ Route::post('/login', function (Request $request) {
         'user' => $user
     ];
 });
+
+
+Route::middleware('auth:sanctum')->post('/logout', function(Request $request) {
+    $user = $request->user();
+    $user->tokens()
+        ->where('id', $user->currentAccessToken()->id)
+        ->delete();
+});
+
+Route::middleware('auth:sanctum')->get('/ouruser', function(Request $request) {
+    return $request->user();
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

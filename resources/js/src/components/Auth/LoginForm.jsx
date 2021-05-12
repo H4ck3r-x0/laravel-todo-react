@@ -1,10 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { Redirect } from "react-router-dom";
+
 import axios from "axios";
+import { AuthContext } from "../../contexts/AuthContexts";
 
 function LoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-
+    const auth = useContext(AuthContext);
     const login = async () => {
         const data = {
             email: email,
@@ -15,9 +18,10 @@ function LoginForm() {
             .post("http://127.0.0.1:8000/api/login", data)
             .then(({ data }) => {
                 const userToken = JSON.stringify(data.token);
-                const user = JSON.stringify.stringify(data.user);
+                const user = JSON.stringify(data.user);
                 localStorage.setItem("userToken", userToken);
                 localStorage.setItem("user", user);
+                auth.setUser(data.user);
             })
             .catch((error) => console.log(error));
     };
@@ -35,6 +39,11 @@ function LoginForm() {
     const handlePasswordChange = (event) => {
         setPassword(event.target.value);
     };
+
+    if (auth.user) {
+        return <Redirect to="/" />;
+    }
+
     return (
         <div className="flex flex-col justify-center items-center">
             <h1 className="text-4xl py-4">Login</h1>
